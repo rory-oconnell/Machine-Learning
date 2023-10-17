@@ -9,7 +9,9 @@
 import gymnasium as gym
 import numpy as np
 
+
 env = gym.make('MountainCar-v0', render_mode='human')
+state, info = env.reset()
 
 # Hyperparameters
 LEARNING_RATE = 0.1 # How much we update our Q-values at each iteration
@@ -23,9 +25,34 @@ discrete_os_win_size = (env.observation_space.high - env.observation_space.low) 
 # A Q-value is the expected future reward for a given state-action pair.
 q_table = np.random.uniform(low=-2, high=0, size=(DISCRETE_OS_SIZE + [env.action_space.n]))
 
+print(state.shape)
+print(env.observation_space.low.shape)
+print(discrete_os_win_size.shape)
+
+diff = state - env.observation_space.low
+print("diff:", diff)
+
+division_result = diff / discrete_os_win_size
+print("division_result:", division_result)
+
+discrete_state = division_result.astype(np.int32)
+print("discrete_state:", discrete_state)
+
 def get_discrete_state(state):
-    discrete_state = (state - env.observation_space.low) / discrete_os_win_size
-    return tuple(discrete_state.astype(np.int))
+
+    print(state.shape)
+    print(env.observation_space.low.shape)
+    print(discrete_os_win_size.shape)
+
+    diff = state - env.observation_space.low
+    print("diff:", diff)
+
+    division_result = diff / discrete_os_win_size
+    print("division_result:", division_result)
+
+    discrete_state = division_result.astype(np.int32)
+    print("discrete_state:", discrete_state)
+    return tuple(discrete_state.astype(np.int32))
 
 discrete_state = get_discrete_state(env.reset())
 
