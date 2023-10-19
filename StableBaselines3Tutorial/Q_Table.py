@@ -3,6 +3,7 @@
 
 import gymnasium as gym
 import numpy as np
+import time
 
 env = gym.make('MountainCar-v0' )
 env.reset()
@@ -36,6 +37,9 @@ for episode in range(EPISODES):
     done = False
 
     while not done:
+        if render_mode1 == "human":
+            start_time = time.time()
+
         action = np.argmax(q_table[discrete_state])
         observation, reward, terminated, truncated, _ = env.step(action)
         new_discrete_state = get_discrete_state(observation)
@@ -53,6 +57,10 @@ for episode in range(EPISODES):
         discrete_state = new_discrete_state
 
         if terminated or truncated:
+            if render_mode1 == "human":
+                end_time = time.time()
+                print(f"Time taken: {end_time - start_time}")
             done = True
+
             
 env.close()  # Close environment after each episode
