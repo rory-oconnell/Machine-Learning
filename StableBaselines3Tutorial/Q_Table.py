@@ -12,8 +12,15 @@ env.reset()
 LEARNING_RATE = 0.1 # How much we update our Q-values at each iteration
 DISCOUNT = 0.95 # How much we value future rewards over current rewards
 EPISODES = 25000 # How many episodes we want to run
+
 SHOW_EVERY = 1000 # How often we want to render the environment
 DISCRETE_OS_SIZE = [20] * len(env.observation_space.high)
+
+epsilon = 0.5 # How much we want to explore
+START_EPSILON_DECAYING = 1 # At what episode we start decaying epsilon
+END_EPSILON_DECAYING = EPISODES // 2 # At what episode we end decaying epsilon, // is floor division
+
+epsilon_decay_value = epsilon/(END_EPSILON_DECAYING - START_EPSILON_DECAYING)
 
 discrete_os_win_size = (env.observation_space.high - env.observation_space.low) / DISCRETE_OS_SIZE
 
@@ -37,6 +44,11 @@ for episode in range(EPISODES):
     done = False
 
     while not done:
+        if np.random.random() > epsilon:
+            action = np.argmax(q_table[discrete_state])
+        else:
+            action = np.random.randint(0, env.action_space.n)
+        
         if render_mode1 == "human":
             start_time = time.time()
 
@@ -54,13 +66,19 @@ for episode in range(EPISODES):
             print(f"We made it on episode {episode}")
             q_table[discrete_state + (action, )] = 0
 
-        discrete_state = new_discrete_state
-
         if terminated or truncated:
             if render_mode1 == "human":
                 end_time = time.time()
+            if terminated:
+                print(f"We made it to the goal! on episode {episode}")
                 print(f"Time taken: {end_time - start_time}")
             done = True
+        
+        discrete_state = new_discrete_state
+    
+    if END_EPSILON_DECAYING >= episode >= START_EPSILON_DECAYING:   # Decaying is for exploration
+        epsilon -= epsilon_decay_value
+
 
             
 env.close()  # Close environment after each episode
