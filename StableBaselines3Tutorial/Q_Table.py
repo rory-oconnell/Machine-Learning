@@ -1,3 +1,5 @@
+# Code content is from Q-Learning playlist by sentdex
+
 # pip install gym
 # pip install matplotlib
 
