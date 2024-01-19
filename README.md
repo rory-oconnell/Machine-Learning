@@ -10,9 +10,6 @@ This project is a collaboration with Dr. Ivana Dusparic focusing on Multi-Object
 ## Usage
 This project is still under development.
 
-## Contributing
-We welcome contributions to this project. Please follow these guidelines [link to contribution guidelines].
-
 ## Authors and Acknowledgment
 - Rory O'Connell
 - Dr. Ivana Dusparic
